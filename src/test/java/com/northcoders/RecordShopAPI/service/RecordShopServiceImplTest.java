@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,14 +52,15 @@ class RecordShopServiceImplTest {
     @Test
     void getAllAlbums() {
         when(mockAlbumRepository.findAll()).thenReturn(albums);
-
         List<Album> result = recordShopServiceImpl.getAllAlbums();
-
         assertThat(result).hasSize(2);
         assertThat(result).isEqualTo(albums);
     }
 
     @Test
     void getALbumById() {
+        when(mockAlbumRepository.findById(2L)).thenReturn(Optional.ofNullable(albums.get(1)));
+        var result = recordShopServiceImpl.getALbumById(2L);
+        assertThat(result).isEqualTo(albums.get(1));
     }
 }
