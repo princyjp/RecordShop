@@ -2,6 +2,7 @@ package com.northcoders.RecordShopAPI.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.northcoders.RecordShopAPI.model.Album;
+import com.northcoders.RecordShopAPI.model.Artist;
 import com.northcoders.RecordShopAPI.model.Genre;
 import com.northcoders.RecordShopAPI.repository.AlbumRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,14 +36,14 @@ class RecordShopServiceImplTest {
         albums = new ArrayList<>();
         albums.add(Album.builder()
                 .title("Black Sbbath")
-                .artist("N.I.B")
+                .artist(Artist.builder().artist_id(1L).name("N.I.B").build())
                 .genre(Genre.METAL)
                 .release_year(Year.of(2009))
                 .stock(4)
                 .price(BigDecimal.valueOf(23.3)).build());
         albums.add(Album.builder()
                 .title("Waiting for a train")
-                .artist("Jimmie Rodgers")
+                .artist(Artist.builder().artist_id(2L).name("Jimmie Rodgers").build())
                 .genre(Genre.COUNTRY)
                 .release_year(Year.of(2000))
                 .stock(14)
@@ -50,7 +51,7 @@ class RecordShopServiceImplTest {
     }
 
     @Test
-    void getAllAlbums() {
+    void getAllAlbumsTest() {
         when(mockAlbumRepository.findAll()).thenReturn(albums);
         List<Album> result = recordShopServiceImpl.getAllAlbums();
         assertThat(result).hasSize(2);
@@ -58,9 +59,15 @@ class RecordShopServiceImplTest {
     }
 
     @Test
-    void getALbumById() {
+    void getAlbumByIdTest() {
         when(mockAlbumRepository.findById(2L)).thenReturn(Optional.ofNullable(albums.get(1)));
         var result = recordShopServiceImpl.getALbumById(2L);
+        assertThat(result).isEqualTo(albums.get(1));
+    }
+    @Test
+    void insertAlbumTest() {
+        when(mockAlbumRepository.save(albums.get(1))).thenReturn(albums.get(1));
+        var result = recordShopServiceImpl.insertAlbum(albums.get(1));
         assertThat(result).isEqualTo(albums.get(1));
     }
 }
