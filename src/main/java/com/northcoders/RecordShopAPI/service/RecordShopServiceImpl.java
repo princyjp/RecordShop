@@ -28,4 +28,9 @@ public class RecordShopServiceImpl implements RecordShopService {
 
         return null;
     }
+
+    @Override
+    public Album insertAlbum(Album album) {
+        return albumRepository.save(album);
+    }
 }
