@@ -42,3 +42,5 @@ dump.sql
 *.h2.db
 *.mv.db
 *.trace.db
+
+*.properties
