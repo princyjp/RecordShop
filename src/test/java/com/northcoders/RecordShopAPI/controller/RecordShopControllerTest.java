@@ -42,7 +42,7 @@ class RecordShopControllerTest {
     private static List<Album> albums;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         mockMvcController = MockMvcBuilders.standaloneSetup(recordShopController).build();
         mapper = new ObjectMapper();
     }
@@ -67,15 +67,27 @@ class RecordShopControllerTest {
     }
 
     @Test
-    void getAllAlbums() throws Exception{
+    void getAllAlbumsTest() throws Exception {
         when(mockrecordShopServiceImpl.getAllAlbums()).thenReturn(albums);
 
- this.mockMvcController.perform(
-         MockMvcRequestBuilders.get("/api/v1/recordshop"))
-                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("Black Sbbath"))
-                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value("Waiting for a train"))
-                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].stock").value(4))
-                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].stock").value(14));
+        this.mockMvcController.perform(
+                        MockMvcRequestBuilders.get("/api/v1/recordshop"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].title").value("Black Sbbath"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].title").value("Waiting for a train"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].stock").value(4))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].stock").value(14));
+
+
+    }
+    @Test
+    void getAlbumbyIdTest() throws Exception {
+        when(mockrecordShopServiceImpl.getALbumById(1L)).thenReturn(albums.get(0));
+
+        this.mockMvcController.perform(
+                        MockMvcRequestBuilders.get("/api/v1/recordshop/1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Black Sbbath"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.stock").value(4));
+
 
 
     }
