@@ -1,6 +1,5 @@
 package com.northcoders.RecordShopAPI.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.northcoders.RecordShopAPI.model.Album;
 import com.northcoders.RecordShopAPI.model.Artist;
 import com.northcoders.RecordShopAPI.model.Genre;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -19,16 +17,15 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
-class RecordShopServiceImplTest {
+class AlbumsServiceImplTest {
     @Mock
     AlbumRepository mockAlbumRepository;
 
     @InjectMocks
-    RecordShopServiceImpl recordShopServiceImpl;
+    AlbumsServiceImpl recordShopServiceImpl;
     private static List<Album> albums;
 
     @BeforeAll
@@ -65,9 +62,9 @@ class RecordShopServiceImplTest {
         assertThat(result).isEqualTo(albums.get(1));
     }
     @Test
-    void insertAlbumTest() {
+    void saveOrUpdateAlbumTest() {
         when(mockAlbumRepository.save(albums.get(1))).thenReturn(albums.get(1));
-        var result = recordShopServiceImpl.insertAlbum(albums.get(1));
+        var result = recordShopServiceImpl.saveOrUpdateAlbum(albums.get(1));
         assertThat(result).isEqualTo(albums.get(1));
     }
 }

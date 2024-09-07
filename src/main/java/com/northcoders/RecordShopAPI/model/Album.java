@@ -1,9 +1,9 @@
 package com.northcoders.RecordShopAPI.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -14,6 +14,7 @@ import java.time.Year;
 @AllArgsConstructor
 @Builder
 @Table(name = "Albums")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "albumId")
 public class Album {
     @Id
     @GeneratedValue
@@ -23,24 +24,26 @@ public class Album {
     @Column
     String title;
 
-    @Column
-    long artist_id;
-
-    @Column
-    String artist;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "artist_id")
+    //@JsonBackReference
+    Artist artist;
+//    @Column
+//    String artist;
 
     @Column
     Year release_year;
 
-    @Column
-    long genre_id;
-
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "genre_id")
     @Column
     Genre genre;
 
     @Column
     BigDecimal price;
 
+    @Column
+    int stock;
 
 
 }
