@@ -24,15 +24,14 @@ public class Album {
     @Column
     String title;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    //@ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "artist_id")
     //@JsonBackReference
     Artist artist;
-//    @Column
-//    String artist;
 
     @Column
-    Year release_year;
+    Year releaseYear;
 
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "genre_id")

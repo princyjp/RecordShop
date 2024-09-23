@@ -9,7 +9,6 @@ import com.northcoders.RecordShopAPI.model.Artist;
 import com.northcoders.RecordShopAPI.model.Genre;
 import com.northcoders.RecordShopAPI.repository.AlbumRepository;
 import com.northcoders.RecordShopAPI.repository.ArtistRepository;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,7 +42,7 @@ class AlbumsServiceImplTest {
     @BeforeAll
     static void beforeAll() {
         albums = new ArrayList<>();
-        albums.add(Album.builder()
+        albums.add(Album.builder().albumId(1)
                 .title("Black Sbbath")
                 .artist(Artist.builder().artist_id(1L).name("N.I.B").build())
                 .genre(Genre.METAL)
@@ -98,7 +97,7 @@ class AlbumsServiceImplTest {
     void saveAlbumTest() {
         when(mockArtistRepository.save(albums.get(1).getArtist())).thenReturn(albums.get(1).getArtist());
         when(mockAlbumRepository.save(albums.get(1))).thenReturn(albums.get(1));
-        var result = recordShopServiceImpl.saveOrUpdateAlbum(albums.get(1));
+        var result = recordShopServiceImpl.saveAlbum(albums.get(1));
         assertThat(result.getId()).isEqualTo(albums.get(1).getAlbumId());
         assertThat(result.getTitle()).isEqualTo(albums.get(1).getTitle());
     }
@@ -108,10 +107,28 @@ class AlbumsServiceImplTest {
         when(mockAlbumRepository.save(albums.get(1))).thenThrow( new DuplicateEntryException("Album named Waiting for a train already exists."));
 
         DuplicateEntryException exception = assertThrows(DuplicateEntryException.class, ()-> {
-            recordShopServiceImpl.saveOrUpdateAlbum(albums.get(1));
+            recordShopServiceImpl.saveAlbum(albums.get(1));
         });
         assertEquals("Album named Waiting for a train already exists.",exception.getMessage());
         verify(mockAlbumRepository,times(1)).save(albums.get(1));
+
+    }
+    @Test
+    void updateAlbumTest(){
+        Album updatedalbum = Album.builder().albumId(1)
+                .title("Black Sbbath")
+                .artist(Artist.builder().artist_id(1L).name("N.I.B").build())
+                .genre(Genre.METAL)
+                .releaseYear(Year.of(2009))
+                .stock(10)
+                .price(BigDecimal.valueOf(23.3)).build();
+        when(mockAlbumRepository.save(albums.get(0))).thenReturn(albums.get(0));
+        AlbumDTO album = recordShopServiceImpl.saveAlbum(albums.get(0));
+        verify(mockAlbumRepository,times(1)).save(albums.get(0));
+        var result = recordShopServiceImpl.updateAlbum(album.getId(),updatedalbum);
+        assertThat(result.getId()).isEqualTo(album.getId());
+        assertThat(result.getTitle()).isEqualTo(album.getTitle());
+        assertThat(result.getStock()).isEqualTo(album.getStock());
 
     }
 }
