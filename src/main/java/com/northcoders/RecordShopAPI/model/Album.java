@@ -24,8 +24,8 @@ public class Album {
     @Column
     String title;
 
-    //@ManyToOne(cascade = CascadeType.MERGE)
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "artist_id")
     //@JsonBackReference
     Artist artist;
